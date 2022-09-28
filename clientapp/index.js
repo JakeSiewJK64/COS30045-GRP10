@@ -19,7 +19,7 @@ window.onload = () => {
         const dataReady = myDataset;
         const myColor = d3.scaleOrdinal()
             .domain(allGroup)
-            .range(d3.schemeSet2);
+            .range(d3.schemeCategory10);
 
         // Add X axis --> it is a date format
         const x = d3.scaleTime()
@@ -106,24 +106,78 @@ window.onload = () => {
     }
 
     const initializeSingaporeEnergyProduction = (myDataset) => {
-        console.log(myDataset);
+        const margin = { top: 10, right: 100, bottom: 30, left: 30 },
+            w = 650 - margin.left - margin.right,
+            h = 400 - margin.top - margin.bottom;
+        var stacked = d3.stack()
+            .keys(["CCGT", "Biofuel", "SolarPV", "SteamTurbine", "GasTurbine"])
+        var series = stacked(myDataset);
+        var svg = d3.select("#stacked-singapore-production")
+            .append("svg")
+            .attr("width", w + margin.left + margin.right)
+            .attr("height", h + margin.top + margin.bottom)
+            .attr("transform", `translate(${margin.left}, ${margin.top})`)
+        var color = d3.scaleOrdinal(d3.schemeCategory10)
+        var groups = svg.selectAll("g")
+            .data(series)
+            .enter()
+            .append("g")
+            .style("fill", (d, i) => {
+                return color(i);
+            })
+        // x-axis for time
+        var xScale = d3.scaleBand()
+            .domain(d3.range(myDataset.length))
+            .range([0, w])
+            .paddingInner(.01);
+
+        svg.append("g")
+            .attr("transform", `translate(50, ${h})`)
+            .call(d3.axisBottom(xScale).tickFormat(function (d) {
+                return d3.format(".0f")(d / 1);
+            }));
+
+        // y axis for production joules
+        var yScale = d3.scaleLinear()
+            .domain([0, 20000])
+            .range([h, 0])
+
+        d3.scaleLinear()
+            .domain([0, 45])
+            .range([h, 0]);
+
+        svg.append("g")
+            .call(d3.axisLeft(yScale))
+            .attr("transform", `translate(50,0)`);
+
+        // stacked bars
+        groups.selectAll("rect")
+            .data((d) => {
+                return d;
+            })
+            .enter()
+            .append("rect")
+            .transition()
+            .attr("x", (_, i) => {
+                return xScale(i)
+            })
+            .attr("y", (d) => {
+                return yScale(d[1])
+            })
+            .attr("height", (d) => {
+                return yScale(d[0]) - yScale(d[1])
+            })
+            .attr("width", xScale.bandwidth())
+            .attr("transform", `translate(50, 0)`)
     }
 
     d3.csv("../data/singapore/custom-SES_Public_2021.csv", (d) => {
         return {
-            source: d.source,
-            values: [
-                { year: "2012", value: parseFloat(d["2012"]) },
-                { year: "2013", value: parseFloat(d["2013"]) },
-                { year: "2014", value: parseFloat(d["2014"]) },
-                { year: "2015", value: parseFloat(d["2015"]) },
-                { year: "2016", value: parseFloat(d["2016"]) },
-                { year: "2017", value: parseFloat(d["2017"]) },
-                { year: "2018", value: parseFloat(d["2018"]) },
-                { year: "2019", value: parseFloat(d["2019"]) },
-                { year: "2020", value: parseFloat(d["2020"]) },
-                { year: "2021", value: parseFloat(d["2021"]) },
-            ]
+            SolarPV: parseFloat(d["Solar PV"]),
+            CCGT: parseFloat(d["CCGT/Co-Gen/Tri-Gen"]),
+            GasTurbine: parseFloat(d["Open Cycle Gas Turbine"]),
+            Biofuel: parseFloat(d["Waste-To-Energy"]),
+            SteamTurbine: parseFloat(d["Steam Turbine"]),
         }
     }).then((data) => {
         initializeSingaporeEnergyProduction(data);
