@@ -96,6 +96,7 @@ window.onload = () => {
             .attr("class", "btn mx-1")
             .attr("value", (d) => { return d; })
             .style("font-weight", 500)
+            .style("color", "white")
             .style("background-color", (d) => {
                 return myColor(d)
             })
