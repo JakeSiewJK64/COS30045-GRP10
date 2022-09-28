@@ -9,6 +9,12 @@ svg {
     font-family: Sans-Serif, Arial;
 }
 
+.graphic-card-holder {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
 .line {
     stroke-width: 2;
     fill: none;

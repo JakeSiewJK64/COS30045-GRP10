@@ -23,15 +23,18 @@ window.onload = () => {
 
         // Add X axis --> it is a date format
         const x = d3.scaleTime()
-            .domain([2012, 2019])
-            .range([0, width]);
+            .domain([new Date(2012), new Date(2019)])
+            .range([0, width])
+
         svg.append("g")
             .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(x).tickFormat(function (d) {
+                return d3.format(".0f")(d / 1);
+            }));
 
         // Add Y axis
         const y = d3.scaleLinear()
-            .domain([0, 100])
+            .domain([0, 45])
             .range([height, 0]);
         svg.append("g")
             .call(d3.axisLeft(y));
@@ -84,8 +87,6 @@ window.onload = () => {
             .style("fill", d => myColor(d.name))
             .style("font-size", 15)
 
-        var removed = []
-
         d3.select("#button_placeholder")
             .selectAll("input")
             .data(allGroup)
@@ -103,6 +104,30 @@ window.onload = () => {
                 d3.selectAll("." + d).transition().style("opacity", currentOpacity == 1 ? 0 : 1)
             })
     }
+
+    const initializeSingaporeEnergyProduction = (myDataset) => {
+        console.log(myDataset);
+    }
+
+    d3.csv("../data/singapore/custom-SES_Public_2021.csv", (d) => {
+        return {
+            source: d.source,
+            values: [
+                { year: "2012", value: parseFloat(d["2012"]) },
+                { year: "2013", value: parseFloat(d["2013"]) },
+                { year: "2014", value: parseFloat(d["2014"]) },
+                { year: "2015", value: parseFloat(d["2015"]) },
+                { year: "2016", value: parseFloat(d["2016"]) },
+                { year: "2017", value: parseFloat(d["2017"]) },
+                { year: "2018", value: parseFloat(d["2018"]) },
+                { year: "2019", value: parseFloat(d["2019"]) },
+                { year: "2020", value: parseFloat(d["2020"]) },
+                { year: "2021", value: parseFloat(d["2021"]) },
+            ]
+        }
+    }).then((data) => {
+        initializeSingaporeEnergyProduction(data);
+    })
 
     d3.csv("../data/custom-energy-usage-by-world.csv", (d) => {
         return {
