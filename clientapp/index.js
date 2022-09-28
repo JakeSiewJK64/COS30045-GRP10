@@ -121,6 +121,7 @@ window.onload = () => {
             .attr("height", h + margin.top + margin.bottom)
             .attr("transform", `translate(${margin.left}, ${margin.top})`)
         var color = d3.scaleOrdinal(d3.schemeCategory10)
+        var tags = Object.keys(myDataset[0].values);
         var groups = svg.selectAll("g")
             .data(series)
             .enter()
@@ -161,6 +162,30 @@ window.onload = () => {
                 return xScale(d.data.year) - 20
             })
             .attr('height', (d) => yScale(d[0]) - yScale(d[1]));
+
+        var legend = svg.append('g')
+            .attr('transform', `translate(50, 50)`)
+
+        legend.selectAll('rect')
+            .data(tags)
+            .enter()
+            .append('rect')
+            .attr('x', (_, i) => i * 90 + 20)
+            .attr('y', () => 0)
+            .attr('width', 12)
+            .attr('height', 12)
+            .attr('fill', (_, i) => {
+                return color(i);
+            });
+
+        legend.selectAll("text")
+            .data(tags)
+            .enter()
+            .append("text")
+            .text((d) => d)
+            .attr("font-size", 12)
+            .attr('x', (_, i) => i * 90 + 20)
+            .attr('y', -10)
     }
 
     d3.csv("../data/singapore/custom-SES_Public_2021.csv", (d) => {
