@@ -74,3 +74,16 @@ svg {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+.hidden {
+    opacity: 0;
+    transition: all 1s;
+    filter: blur(5px);
+    transform: translateX(-100%);
+}
+
+.show {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+}
