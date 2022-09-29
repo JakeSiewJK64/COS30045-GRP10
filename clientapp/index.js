@@ -248,6 +248,170 @@ window.onload = () => {
             .attr('y', -10)
     }
 
+    const singaporeMapSolarPVInstallation = (json, data) => {
+        var w = 800;
+        var h = 400;
+        let regions = [
+            {
+                region: "north",
+                states: [
+                    "SEMBAWANG",
+                    "YISHUN",
+                    "SUNGEI KADUT",
+                    "CENTRAL WATER CATCHMENT",
+                    "MANDAI",
+                    "SUNGEI KADUTd",
+                    "LIM CHU KANG",
+                    "WOODLANDS",
+                    "SIMPANG",
+                ]
+            },
+            {
+                region: "east",
+                states: [
+                    "BEDOK",
+                    "CHANGI",
+                    "CHANGI BAY",
+                    "TAMPINES",
+                    "PAYA LEBAR",
+                    "TEMPINES",
+                    "PASIR RIS"
+                ]
+            },
+            {
+                region: "north-east",
+                states: [
+                    "SELETAR",
+                    "PUNGGOL",
+                    "HOUGANG",
+                    "ANG MO KIO",
+                    "SERANGOON",
+                    "SENGKANG",
+                    "NORTH-EASTERN ISLANDS"
+                ]
+            },
+            {
+                region: "west",
+                states: [
+                    "BOON LAY",
+                    "BUKIT BATOK",
+                    "CLEMENTI",
+                    "BUKIT PANJANG",
+                    "JURONG EAST",
+                    "TUAS",
+                    "WESTERN ISLANDS",
+                    "WESTERN WATER CATCHMENT",
+                    "PIONEER",
+                    "TUAS",
+                    "CHOA CHU KANG",
+                    "TENGAH",
+                    "JURONG WEST",
+                    "RIVER VALLEY"
+                ]
+            },
+            {
+                region: "central",
+                states: [
+                    "BISHAN",
+                    "ROCHOR",
+                    "OUTRAM",
+                    "MUSEUM",
+                    "MARINA EAST",
+                    "MARINA SOUTH",
+                    "BUKIT MERAH",
+                    "BUKIT TIMAH",
+                    "GEYLANG",
+                    "KALLANG",
+                    "MARINE PARADE",
+                    "NOVENA",
+                    "QUEENSTOWN",
+                    "SOUTHERN ISLANDS",
+                    "TANGLIN",
+                    "TOA PAYOH",
+                    "ORCHARD",
+                    "NEWTON",
+                    "SINGAPORE RIVER",
+                    "DOWNTOWN CORE"
+                ]
+            },
+        ]
+
+        data.forEach((res) => {
+            json.features.forEach((state) => {
+                let statename = state.properties.name;
+                regions.forEach((item) => {
+                    if (item.region.toUpperCase() == res.region.toUpperCase() && item.states.includes(statename)) {
+                        state.properties.installations = res.installed;
+                        state.properties.capacity = res.capacity;
+                        state.properties.region = item.region.toUpperCase();
+                    }
+                })
+            })
+        })
+
+        var svg = d3.select("#myMap")
+            .append("svg")
+            .attr("fill", "grey")
+            .attr("width", w)
+            .attr("height", h);
+
+        var projection = d3.geoMercator()
+            .fitSize([w, h], json)
+
+        var geoPath = d3.geoPath(projection);
+
+        svg.selectAll("path")
+            .data(json.features)
+            .enter()
+            .append("path")
+            .attr("d", geoPath)
+            .on("mouseover", function (event, d) {
+
+                var xPosition = d3.select(this).attr("posX");
+                var yPosition = d3.select(this).attr("posY");
+
+                let tooltip = svg.append("g")
+                    .attr("id", "tooltip-singapore-map")
+
+                let items = ["name", "capacity", "region", "installations"]
+                let count = 0;
+                items.forEach((element) => {
+                    tooltip
+                        .append("text")
+                        .text(`${element.toUpperCase()}: ${d.properties[element]}`)
+                        .style("color", "black")
+                        .style("font-size", 18)
+                        .attr("x", xPosition + 500)
+                        .attr("y", (yPosition + h) - count)
+                    count += 20
+                })
+
+                var hover = d3.select(this)
+                    .attr("class", "state")
+                    .attr("fill", "orange")
+                    .attr("cursor", "pointer")
+                    .transition()
+            })
+            .on("mouseout", function (event, d) {
+                svg.select("#tooltip-singapore-map").remove();
+                d3.select(this)
+                    .attr("class", "state")
+                    .attr("fill", "grey")
+            })
+    }
+
+    d3.json("../data/map/singapore_map.json").then((json) => {
+        d3.csv("../data/singapore/singapore_solar_panel_installations_by_region.csv", (d) => {
+            return {
+                region: d.region,
+                installed: parseFloat(d.total_solar_installations),
+                capacity: parseFloat(d.installed_capacity)
+            }
+        }).then((data) => {
+            singaporeMapSolarPVInstallation(json, data)
+        })
+    })
+
     d3.csv("../data/singapore/custom-SES_Public_2021.csv", (d) => {
         return {
             year: parseInt(d.year),
