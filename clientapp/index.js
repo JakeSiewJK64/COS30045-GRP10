@@ -166,13 +166,38 @@ window.onload = () => {
             .attr('x', (d) => {
                 return xScale(d.data.year) - 20
             })
-            .attr('height', (d) => yScale(d[0]) - yScale(d[1]));
+            .attr('height', (d) => yScale(d[0]) - yScale(d[1]))
+
+        groups.selectAll("rect")
+            .on("mouseover", function (event, d) {
+                var xPos = parseFloat(d3.select(this).attr("x"));
+                var yPos = parseFloat(d3.select(this).attr("y"));
+                var height = parseFloat(d3.select(this).attr("height"))
+
+                d3.select(this)
+                    .attr("stroke", "blue")
+                    .attr("stroke-width", 0.8)
+
+                svg.append("text")
+                    .attr("id", "tooltip")
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", 12)
+                    .attr("x", xPos + 70)
+                    .attr("y", yPos - 50)
+                    .text(parseFloat(d[1]).toFixed(".2f"))
+            })
+            .on("mouseout", function () {
+                svg.select("#tooltip").remove();
+                d3.select(this).attr("stroke", "pink").attr("stroke-width", 0.2);
+
+            })
+
 
         var legend = svg.append('g')
             .attr('transform', `translate(50, 50)`)
 
         legend.selectAll('rect')
-            .data(tags)
+            .data(color.domain().slice().reverse())
             .enter()
             .append('rect')
             .attr('x', (_, i) => i * 90 + 20)
@@ -191,65 +216,6 @@ window.onload = () => {
             .attr("font-size", 12)
             .attr('x', (_, i) => i * 90 + 20)
             .attr('y', -10)
-
-        var yearRange = [
-            2012,
-            2013,
-            2014,
-            2015,
-            2016,
-            2017,
-            2018,
-            2019,
-            2020,
-            2021,
-        ]
-
-        // input start year
-        var dropDown = d3.select("#stacked-singapore-production-input-start-year")
-            .append("select")
-            .attr("class", "mx-2 form-control w-50")
-            .attr("id", "start-year")
-
-        var options = dropDown.selectAll("option")
-            .data(yearRange)
-            .enter()
-            .append("option");
-            
-        options.text((d) => d)
-            .attr("value", (d) => d);
-
-        // input end year
-        var dropDownEndDate = d3.select("#stacked-singapore-production-input-start-year")
-            .append("select")
-            .attr("id", "end-year")
-            .attr("class", "mx-2 form-control w-50")
-
-        var optionsEndDate = dropDownEndDate.selectAll("option")
-            .data(yearRange)
-            .enter()
-            .append("option");
-            
-        optionsEndDate.text((d) => d)
-            .attr("value", (d) => d);
-
-        // add submit button
-        d3.select("#stacked-singapore-production-input-start-year")
-            .append("input")
-            .attr("id", "input-year-submit")
-            .attr("type", "button")
-            .attr("class", "btn btn-success mx-1")
-            .attr("value", "Submit")
-            .style("font-weight", 500)
-            .on("click", () => {
-                startyear = d3.select("#start-year").property("value")
-                endyear = d3.select("#end-year").property("value")
-                xScale.domain([new Date(startyear), new Date(endyear)]);
-                alert(`
-                    start year: ${startyear}
-                    end year: ${endyear}
-                `)
-            })
     }
 
     d3.csv("../data/singapore/custom-SES_Public_2021.csv", (d) => {
