@@ -108,8 +108,6 @@ window.onload = () => {
 
     const initializeSingaporeEnergyProduction = (myDataset) => {
 
-        var startyear = 2012;
-        var endyear = 2021;
         var tags = Object.keys(myDataset[0].values);
 
         const margin = { top: 10, right: 100, bottom: 30, left: 30 },
@@ -155,6 +153,14 @@ window.onload = () => {
             .call(d3.axisLeft(yScale))
             .attr("transform", `translate(50,0)`);
 
+        var ylabel = svg.append("g")
+            .attr("transform", `translate(11,250)`);
+
+        ylabel
+            .append("text")
+            .text("Percentage Energy Generation")
+            .style("transform", `rotate(270deg)`);
+
         // stacked bars
         groups.selectAll("rect")
             .data((d) => d)
@@ -169,10 +175,9 @@ window.onload = () => {
             .attr('height', (d) => yScale(d[0]) - yScale(d[1]))
 
         groups.selectAll("rect")
-            .on("mouseover", function (event, d) {
+            .on("mouseover", function (_, d) {
                 var xPos = parseFloat(d3.select(this).attr("x"));
                 var yPos = parseFloat(d3.select(this).attr("y"));
-                var height = parseFloat(d3.select(this).attr("height"))
 
                 d3.select(this)
                     .attr("stroke", "blue")
