@@ -13,7 +13,7 @@ window.onload = () => {
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
+            .attr("transform", `translate(${margin.left + 10},${margin.top + 10})`);
 
         const allGroup = ["Singapore", "China", "Japan", "Philippines", "Indonesia", "Thailand", "Korea", "Vietnam", "Malaysia"]
         const dataReady = myDataset;
@@ -36,8 +36,18 @@ window.onload = () => {
         const y = d3.scaleLinear()
             .domain([0, 45])
             .range([height, 0]);
+
         svg.append("g")
             .call(d3.axisLeft(y));
+
+        var ylabel = svg.append("g")
+            .attr("transform", `translate(-30,250)`);
+
+        ylabel
+            .append("text")
+            .attr("font-size", 12)
+            .text("% of total final energy consumption")
+            .style("transform", `rotate(270deg)`);
 
         // Add the lines
         const line = d3.line()
@@ -154,10 +164,11 @@ window.onload = () => {
             .attr("transform", `translate(50,0)`);
 
         var ylabel = svg.append("g")
-            .attr("transform", `translate(11,250)`);
+            .attr("transform", `translate(8,250)`);
 
         ylabel
             .append("text")
+            .attr("font-size", 12)
             .text("Percentage Energy Generation")
             .style("transform", `rotate(270deg)`);
 
