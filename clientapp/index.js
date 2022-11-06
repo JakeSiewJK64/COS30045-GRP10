@@ -445,7 +445,7 @@ window.onload = () => {
         initializeLinegraph(data)
     })
 
-    function LineChart(data, {
+    const LineChart = (data, {
         x = ([x]) => x, // given d in data, returns the (temporal) x-value
         y = ([, y]) => y, // given d in data, returns the (quantitative) y-value
         z = () => 1, // given d in data, returns the (categorical) z-value
@@ -474,7 +474,7 @@ window.onload = () => {
         strokeOpacity, // stroke opacity of line
         mixBlendMode = "multiply", // blend mode of lines
         voronoi // show a Voronoi overlay? (for debugging)
-    } = {}) {
+    } = {}) => {
         // Compute values.
         const X = d3.map(data, x);
         const Y = d3.map(data, y);
@@ -565,13 +565,15 @@ window.onload = () => {
             .attr("display", "none");
 
         dot.append("circle")
-            .attr("r", 2.5);
+            .attr("r", 5.0);
 
         dot.append("text")
             .attr("font-family", "sans-serif")
-            .attr("font-size", 10)
+            .attr("font-size", 12)
             .attr("text-anchor", "middle")
             .attr("y", -8);
+            //.attr("x", -15); //need to fix
+
 
         function pointermoved(event) {
             const [xm, ym] = d3.pointer(event);
@@ -597,17 +599,18 @@ window.onload = () => {
         return Object.assign(svg.node(), { value: null });
     }
 
-    d3.csv("../examples/data/unemployment.csv").then((unemployment) => {
-        chart = LineChart(unemployment, {
-            x: d => new Date(d.date),
-            y: d => parseFloat(d.unemployment),
-            z: d => d.division,
-            yLabel: "↑ Unemployment (%)",
-            width: 1000,
+    d3.csv("../data/testing.csv").then((value) => {
+        chart = LineChart(value, {
+            x: d => d.year,
+            y: d => parseFloat(d.value),
+            z: d => d.country,
+            yLabel: "↑ Capacity (MW)",
+            width: 950,
             height: 500,
-            color: "steelblue",
-            voronoi: false
+            color: "brown",
+            voronoi: true
         })
-        document.body.append(chart);
+        LineChart(chart);
     })
+
 }
