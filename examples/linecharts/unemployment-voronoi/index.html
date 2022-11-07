@@ -163,6 +163,7 @@
         }
 
         d3.csv("../../data/unemployment.csv").then((unemployment) => {
+            console.log(unemployment);
             chart = LineChart(unemployment, {
                 x: d => new Date(d.date),
                 y: d => parseFloat(d.unemployment),

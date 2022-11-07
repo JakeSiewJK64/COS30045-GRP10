@@ -400,51 +400,6 @@ window.onload = () => {
             })
     }
 
-    d3.json("../data/map/singapore_map.json").then((json) => {
-        d3.csv("../data/singapore/singapore_solar_panel_installations_by_region.csv", (d) => {
-            return {
-                region: d.region,
-                installed: parseFloat(d.total_solar_installations),
-                capacity: parseFloat(d.installed_capacity)
-            }
-        }).then((data) => {
-            singaporeMapSolarPVInstallation(json, data)
-        })
-    })
-
-    d3.csv("../data/singapore/custom-SES_Public_2021.csv", (d) => {
-        return {
-            year: parseInt(d.year),
-            values: {
-                SolarPV: parseFloat(d["Solar PV"]),
-                CCGT: parseFloat(d["CCGT/Co-Gen/Tri-Gen"]),
-                GasTurbine: parseFloat(d["Open Cycle Gas Turbine"]),
-                Biofuel: parseFloat(d["Waste-To-Energy"]),
-                SteamTurbine: parseFloat(d["Steam Turbine"]),
-            }
-        }
-    }).then((data) => {
-        initializeSingaporeEnergyProduction(data);
-    })
-
-    d3.csv("../data/custom-energy-usage-by-world.csv", (d) => {
-        return {
-            name: d.country,
-            values: [
-                { year: "2012", value: parseFloat(d["2012"]) },
-                { year: "2013", value: parseFloat(d["2013"]) },
-                { year: "2014", value: parseFloat(d["2014"]) },
-                { year: "2015", value: parseFloat(d["2015"]) },
-                { year: "2016", value: parseFloat(d["2016"]) },
-                { year: "2017", value: parseFloat(d["2017"]) },
-                { year: "2018", value: parseFloat(d["2018"]) },
-                { year: "2019", value: parseFloat(d["2019"]) },
-            ]
-        }
-    }).then((data) => {
-        initializeLinegraph(data)
-    })
-
     const LineChart = (data, {
         x = ([x]) => x, // given d in data, returns the (temporal) x-value
         y = ([, y]) => y, // given d in data, returns the (quantitative) y-value
@@ -571,8 +526,8 @@ window.onload = () => {
             .attr("font-family", "sans-serif")
             .attr("font-size", 12)
             .attr("text-anchor", "middle")
-            .attr("y", -8);
-            //.attr("x", -15); //need to fix
+            .attr("y", -8)
+            .attr("x", -15);
 
 
         function pointermoved(event) {
@@ -580,7 +535,11 @@ window.onload = () => {
             const i = d3.least(I, i => Math.hypot(xScale(X[i]) - xm, yScale(Y[i]) - ym)); // closest point
             path.style("stroke", ([z]) => Z[i] === z ? null : "#ddd").filter(([z]) => Z[i] === z).raise();
             dot.attr("transform", `translate(${xScale(X[i])},${yScale(Y[i])})`);
-            if (T) dot.select("text").text(T[i]);
+            if (T) {
+                dot
+                    .select("text")
+                    .text(`Country: ${T[i]}, Value: ${Y[i]}, Year: ${X[i]}`);
+            }
             svg.property("value", O[i]).dispatch("input", { bubbles: true });
         }
 
@@ -599,7 +558,52 @@ window.onload = () => {
         return Object.assign(svg.node(), { value: null });
     }
 
-    d3.csv("../data/testing.csv").then((value) => {
+    d3.json("../data/map/singapore_map.json").then((json) => {
+        d3.csv("../data/singapore/singapore_solar_panel_installations_by_region.csv", (d) => {
+            return {
+                region: d.region,
+                installed: parseFloat(d.total_solar_installations),
+                capacity: parseFloat(d.installed_capacity)
+            }
+        }).then((data) => {
+            singaporeMapSolarPVInstallation(json, data)
+        })
+    })
+
+    d3.csv("../data/singapore/custom-SES_Public_2021.csv", (d) => {
+        return {
+            year: parseInt(d.year),
+            values: {
+                SolarPV: parseFloat(d["Solar PV"]),
+                CCGT: parseFloat(d["CCGT/Co-Gen/Tri-Gen"]),
+                GasTurbine: parseFloat(d["Open Cycle Gas Turbine"]),
+                Biofuel: parseFloat(d["Waste-To-Energy"]),
+                SteamTurbine: parseFloat(d["Steam Turbine"]),
+            }
+        }
+    }).then((data) => {
+        initializeSingaporeEnergyProduction(data);
+    })
+
+    d3.csv("../data/custom-energy-usage-by-world.csv", (d) => {
+        return {
+            name: d.country,
+            values: [
+                { year: "2012", value: parseFloat(d["2012"]) },
+                { year: "2013", value: parseFloat(d["2013"]) },
+                { year: "2014", value: parseFloat(d["2014"]) },
+                { year: "2015", value: parseFloat(d["2015"]) },
+                { year: "2016", value: parseFloat(d["2016"]) },
+                { year: "2017", value: parseFloat(d["2017"]) },
+                { year: "2018", value: parseFloat(d["2018"]) },
+                { year: "2019", value: parseFloat(d["2019"]) },
+            ]
+        }
+    }).then((data) => {
+        initializeLinegraph(data)
+    })
+
+    d3.csv("../data/worldwide/power_capacity_solar_SEA.csv").then((value) => {
         chart = LineChart(value, {
             x: d => d.year,
             y: d => parseFloat(d.value),
@@ -608,9 +612,8 @@ window.onload = () => {
             width: 950,
             height: 500,
             color: "brown",
-            voronoi: true
+            voronoi: false
         })
         LineChart(chart);
     })
-
 }
