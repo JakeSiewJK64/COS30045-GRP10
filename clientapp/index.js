@@ -450,7 +450,9 @@ window.onload = () => {
         // Construct scales and axes.
         const xScale = xType(xDomain, xRange);
         const yScale = yType(yDomain, yRange);
-        const xAxis = d3.axisBottom(xScale).ticks(width / 80).tickSizeOuter(0);
+        const xAxis = d3.axisBottom(xScale).ticks(width / 80).tickSizeOuter(0).tickFormat(function (d) {
+            return d3.format(".0f")(d);
+        });
         const yAxis = d3.axisLeft(yScale).ticks(height / 60, yFormat);
 
         // Compute titles.
@@ -475,7 +477,6 @@ window.onload = () => {
             .on("pointerleave", pointerleft)
             .on("touchstart", event => event.preventDefault());
 
-        // An optional Voronoi display (for fun).
         if (voronoi) svg.append("path")
             .attr("fill", "none")
             .attr("stroke", "#ccc")
@@ -605,7 +606,7 @@ window.onload = () => {
 
     d3.csv("../data/worldwide/power_capacity_solar_SEA.csv").then((value) => {
         chart = LineChart(value, {
-            x: d => d.year,
+            x: d => new Date(d.year).getFullYear(),
             y: d => parseFloat(d.value),
             z: d => d.country,
             yLabel: "↑ Capacity (MW)",
