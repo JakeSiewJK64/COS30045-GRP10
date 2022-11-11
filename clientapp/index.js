@@ -586,7 +586,7 @@ window.onload = () => {
         initializeSingaporeEnergyProduction(data);
     })
 
-    d3.csv("../data/custom-energy-usage-by-world.csv", (d) => {
+    d3.csv("../data/worldwide/custom-energy-usage-by-world.csv", (d) => {
         return {
             name: d.country,
             values: [
