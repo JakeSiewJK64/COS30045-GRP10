@@ -450,9 +450,10 @@ window.onload = () => {
         // Construct scales and axes.
         const xScale = xType(xDomain, xRange);
         const yScale = yType(yDomain, yRange);
-        const xAxis = d3.axisBottom(xScale).ticks(width / 80).tickSizeOuter(0).tickFormat(function (d) {
-            return d3.format(".0f")(d);
-        });
+        const xAxis = d3.axisBottom(xScale)
+            .tickFormat(function (d) {
+                return d3.format(".0f")(d);
+            });
         const yAxis = d3.axisLeft(yScale).ticks(height / 60, yFormat);
 
         // Compute titles.
@@ -469,13 +470,10 @@ window.onload = () => {
             .append("svg")
             .attr("width", width)
             .attr("height", height)
-            .attr("viewBox", [0, 0, width, height])
-            .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
-            .style("-webkit-tap-highlight-color", "transparent")
             .on("pointerenter", pointerentered)
             .on("pointermove", pointermoved)
             .on("pointerleave", pointerleft)
-            .on("touchstart", event => event.preventDefault());
+            .on("touchstart", event => event.preventDefault())
 
         if (voronoi) svg.append("path")
             .attr("fill", "none")
@@ -485,10 +483,12 @@ window.onload = () => {
                 .voronoi([0, 0, width, height])
                 .render());
 
+        // x-axis
         svg.append("g")
             .attr("transform", `translate(0,${height - marginBottom})`)
             .call(xAxis);
 
+        // y-axis
         svg.append("g")
             .attr("transform", `translate(${marginLeft},0)`)
             .call(yAxis)
@@ -497,7 +497,7 @@ window.onload = () => {
                 .attr("x2", width - marginLeft - marginRight)
                 .attr("stroke-opacity", 0.1))
             .call(g => g.append("text")
-                .attr("x", -marginLeft)
+                .attr("x", (marginRight - marginLeft) - 30)
                 .attr("y", 10)
                 .attr("fill", "currentColor")
                 .attr("text-anchor", "start")
@@ -523,13 +523,13 @@ window.onload = () => {
         dot.append("circle")
             .attr("r", 5.0);
 
+        // hover tooltip
         dot.append("text")
             .attr("font-family", "sans-serif")
             .attr("font-size", 12)
             .attr("text-anchor", "middle")
             .attr("y", -8)
             .attr("x", -15);
-
 
         function pointermoved(event) {
             const [xm, ym] = d3.pointer(event);
@@ -610,10 +610,12 @@ window.onload = () => {
             y: d => parseFloat(d.value),
             z: d => d.country,
             yLabel: "↑ Capacity (MW)",
-            width: 950,
+            width: 1500,
             height: 500,
             color: "brown",
-            voronoi: false
+            voronoi: false,
+            marginLeft: 250,
+            marginRight: 250
         })
         LineChart(chart);
     })
