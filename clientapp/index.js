@@ -178,12 +178,12 @@ window.onload = () => {
             .attr("transform", `translate(50,0)`);
 
         var ylabel = svg.append("g")
-            .attr("transform", `translate(8,250)`);
+            .attr("transform", `translate(8,380)`);
 
         ylabel
             .append("text")
             .attr("font-size", 12)
-            .text("Percentage Energy Generation")
+            .text("Electricity Generation Capacity by Technology Type in MW (Megawatts)")
             .style("transform", `rotate(270deg)`);
 
         // stacked bars
@@ -249,8 +249,8 @@ window.onload = () => {
     }
 
     const singaporeMapSolarPVInstallation = (json, data) => {
-        var w = 800;
-        var h = 400;
+        var w = 700;
+        var h = 300;
         let regions = [
             {
                 region: "north",
@@ -381,7 +381,7 @@ window.onload = () => {
                         .text(`${element.toUpperCase()}: ${d.properties[element]}`)
                         .style("color", "black")
                         .style("font-size", 18)
-                        .attr("x", xPosition + 500)
+                        .attr("x", xPosition + 400)
                         .attr("y", (yPosition + h) - count)
                     count += 20
                 })

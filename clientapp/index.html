@@ -22,64 +22,106 @@
             <h3 class="my-auto">RESPOND.er</h3>
         </div>
     </div>
-    <div class="mx-auto w-50 hidden">
-        <div style="margin: 10rem; " class="text-center">
-            <h1>Reliability of Solar Energy</h1>
-            <strong>in</strong>
-            <h3>South East Asia</h3>
-            <div style="border: solid black .5px; " class="w-75 mx-auto"></div>
-        </div>
-    </div>
-    <div class="m-2">
-        <div class="w-100 d-flex flex-row hidden">
-            <div class="card w-100 shadow m-2">
-                <h1 class="card-title m-3">Target Audience</h1>
-                <img src="./img/solar_panel.png" alt="solar-panel" class="solar-panel p-2">
-                <div class="card-body">
-                    The users who will benefit from this visualization are energy enthusiasts,
-                    climate scientists, climate activists and businesspeople from the energy
-                    sector.
-                </div>
-            </div>
-            <div class="card w-100 shadow m-2">
-                <h1 class="card-title m-3">Potential tasks</h1>
-                <img src="./img/green.png" alt="solar-panel" class="solar-panel p-2">
-                <div class="card-body">
-                    The audience of this visualization will want to observe which Southeast Asia country has a better
-                    prospect of utilizing and generating a healthy amount of energy from solar compared to other
-                    alternatives in the space of renewable energy.
-                </div>
-            </div>
-            <div class="card w-100 shadow m-2">
-                <h1 class="card-title m-3">Importance of the project</h1>
-                <img src="./img/sun.png" alt="solar-panel" class="solar-panel p-2">
-                <div class="card-body">
-                    The importance of this visualization project is to give insight to whether solar energy is a viable
-                    source of energy and should remain as an option for renewable energy.
-                </div>
+    <div style="max-width: 100rem" class="d-flex flex-column mx-auto">
+        <div class="mx-auto w-50 hidden">
+            <div style="margin: 10rem; " class="text-center">
+                <h1>Reliability of Solar Energy</h1>
+                <strong>in</strong>
+                <h3>South East Asia</h3>
+                <div style="border: solid black .5px; " class="w-75 mx-auto"></div>
             </div>
         </div>
-    </div>
-    <div class="w-100 graphic-card-holder hidden">
-        <h1>Renewable energy consumption (% of total final energy consumption) in South East Asia</h1>
-        <div id="button_placeholder"></div>
-        <div id="country_energy_by_year" class="mx-auto"></div>
-    </div>
-    <div class="w-100 graphic-card-holder hidden">
-        <h1>Solar Power (total solar capacity, MW) in South East Asia</h1>
-        <div id="solar_power_capacity_by_countries" class="mx-auto"></div>
-    </div>
-    <div class="m-2 hidden">
-        <h1>Singapore Renewable Statistics</h1>
-        <div class="w-100 m-1 d-flex flex-row" class="graphic-card-holder">
-            <div class="w-50 card m-1">
-                <h3 class="card-title m-1">Renewable Energy Production</h3>
-                <div id="stacked-singapore-production-input-start-year" class="d-flex flex-row"></div>
-                <div id="stacked-singapore-production" class="mx-auto"></div>
+        <div class="m-2">
+            <div class="w-100 d-flex flex-row hidden">
+                <div class="card w-100 shadow m-2">
+                    <h1 class="card-title m-3">Target Audience</h1>
+                    <img src="./img/solar_panel.png" alt="solar-panel" class="solar-panel p-2">
+                    <div class="card-body">
+                        The users who will benefit from this visualization are energy enthusiasts,
+                        climate scientists, climate activists and businesspeople from the energy
+                        sector.
+                    </div>
+                </div>
+                <div class="card w-100 shadow m-2">
+                    <h1 class="card-title m-3">Potential tasks</h1>
+                    <img src="./img/green.png" alt="solar-panel" class="solar-panel p-2">
+                    <div class="card-body">
+                        The audience of this visualization will want to observe which Southeast Asia country has a
+                        better
+                        prospect of utilizing and generating a healthy amount of energy from solar compared to other
+                        alternatives in the space of renewable energy.
+                    </div>
+                </div>
+                <div class="card w-100 shadow m-2">
+                    <h1 class="card-title m-3">Importance of the project</h1>
+                    <img src="./img/sun.png" alt="solar-panel" class="solar-panel p-2">
+                    <div class="card-body">
+                        The importance of this visualization project is to give insight to whether solar energy is a
+                        viable
+                        source of energy and should remain as an option for renewable energy.
+                    </div>
+                </div>
             </div>
-            <div class="w-50 card m-2">
-                <h3 class="card-title m-1">Singapore Solar PV Installation by Region</h3>
-                <div id="myMap" class="mx-auto m-2"></div>
+        </div>
+        <div class="w-100 graphic-card-holder hidden">
+            <h1>Renewable energy consumption (% of total final energy consumption) in South East Asia</h1>
+            <div id="button_placeholder"></div>
+            <div id="country_energy_by_year" class="mx-auto"></div>
+            <div class="border rounded my-3 p-3">
+                <span>
+                    The purpose of the line chart is to visualize how much of a priority renewable
+                    enery is for the general public in South East Asian regions. The lowest among the
+                    Asian countries include Singapore, Malaysia and Japan as these countries rely more
+                    on coal powered generators while Vietna, Thailand and Philippines are among the top
+                    Asian countries adopting reneable energy alternatives. Clicking on the country
+                    legends on top will hide that country for better filtering allowing for more focused
+                    visualization on other countries of interest.
+                </span>
+            </div>
+        </div>
+        <div class="w-100 graphic-card-holder hidden">
+            <h1>Solar Power (total solar capacity, MW) in South East Asia</h1>
+            <div id="solar_power_capacity_by_countries" class="mx-auto"></div>
+            <div class="border rounded my-3 p-3">
+                <span>
+                    The following interactive Line chart displays the total solar power capacity generated per
+                    country in Southeast Asia. The purpose of this chart is to visualize just how much energy
+                    in mega watts (MW) in total the population can generate using solar energy. From the results, we can
+                    see that Vietnam has the highest capacity of generated power using solar energy. Upon hovering on
+                    one of the lines, it will focus on that particular country on that particular year highlighted with
+                    a distinct colour.
+                </span>
+            </div>
+        </div>
+        <div class="m-2 hidden">
+            <h1>Singapore Renewable Statistics</h1>
+            <div class="w-100 m-1 d-flex flex-row" class="graphic-card-holder">
+                <div class="w-50 card m-1">
+                    <h3 class="card-title m-1">Renewable Energy Production</h3>
+                    <div id="stacked-singapore-production-input-start-year" class="d-flex flex-row"></div>
+                    <div id="stacked-singapore-production" class="mx-auto"></div>
+                    <div class="border rounded m-3 p-3">
+                        <span>
+                            This stacked bar chart focueses on the total energy capacity in Megawatts produced by
+                            Singapore viaa variety of power sources. We can deduce from the stacked bar chart that Solar
+                            Energy is the lowest among the 5 with Biofuel being the highest renewable resource. Hovering
+                            over one of the bar chart, the corresponding value associated with that bar chart will be
+                            displayed above.
+                        </span>
+                    </div>
+                </div>
+                <div class="w-50 card m-2">
+                    <h3 class="card-title m-1">Singapore Solar PV Installation by Region</h3>
+                    <div id="myMap" class="mx-auto m-2"></div>
+                    <div class="border rounded m-3 p-3">
+                        <span>
+                            The interactive map of Singapore shows each state and the planning region they represent
+                            including North, South, East, West and Central Singapore together with their capacity, and
+                            the total solar panel installations. Hovering over each state will show their respective
+                            information and highlights the state.
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
