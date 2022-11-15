@@ -571,7 +571,7 @@ window.onload = () => {
         })
     })
 
-    d3.csv("../data/singapore/custom-SES_Public_2021.csv", (d) => {
+    d3.csv("../data/singapore/ses_singapore/custom-SES_Public_2021.csv", (d) => {
         return {
             year: parseInt(d.year),
             values: {
