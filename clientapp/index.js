@@ -602,6 +602,14 @@ window.onload = () => {
             .attr("d", function (d, i) {
                 return arc(d, i)
             })
+            .on("mouseover", function (event, d) {
+                d3.select(this)
+                    .attr("opacity", 0.7)
+            })
+            .on("mouseout", function (event, d) {
+                d3.select(this)
+                    .attr("opacity", 1)
+            })
             .append("title")
             .text((d) => {
                 return `${d.data.name} ${d.data.value} MW`
@@ -681,6 +689,14 @@ window.onload = () => {
                     })
                     .attr("d", function (d, i) {
                         return arc(d, i)
+                    })
+                    .on("mouseover", function (event, d) {
+                        d3.select(this)
+                            .attr("opacity", 0.7)
+                    })
+                    .on("mouseout", function (event, d) {
+                        d3.select(this)
+                            .attr("opacity", 1)
                     })
                     .append("title")
                     .text((d) => {
