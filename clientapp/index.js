@@ -201,20 +201,13 @@ window.onload = () => {
 
         groups.selectAll("rect")
             .on("mouseover", function (_, d) {
-                var xPos = parseFloat(d3.select(this).attr("x"));
-                var yPos = parseFloat(d3.select(this).attr("y"));
-
                 d3.select(this)
                     .attr("stroke", "blue")
                     .attr("stroke-width", 0.8)
-
-                svg.append("text")
-                    .attr("id", "tooltip")
-                    .attr("text-anchor", "middle")
-                    .attr("font-size", 12)
-                    .attr("x", xPos + 70)
-                    .attr("y", yPos - 50)
-                    .text(parseFloat(d[1]).toFixed(".2f"))
+                    .append("title")
+                    .text((d, i) => {
+                        return (d[1])
+                    })
             })
             .on("mouseout", function () {
                 svg.select("#tooltip").remove();
