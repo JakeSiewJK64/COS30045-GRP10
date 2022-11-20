@@ -715,6 +715,162 @@ window.onload = () => {
         generateDoughnut(data);
     })
 
+    const generateDoughnutSingaporeTotalCapacity = (disp_data) => {
+        var year = 2021
+        var width = 550;
+        var height = 550;
+        var radius = 200;
+
+        var myData = disp_data.filter((d) => {
+            return d.year == 2021
+        })
+
+        // define color for each catogory
+        var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        // defines the arc of the pie cart
+        var arc = d3.arc()
+            .innerRadius(radius + 50)
+            .outerRadius(radius)
+
+        // define d3 pie chart object
+        var pie = d3.pie()
+            .value(d => d.value)
+            .sort(d => d.name)
+
+        // selects myPieChart area from html.
+        var svg = d3.select("#doughnut-singapore-production")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+
+        // appends pie chart to svg
+        var arcs = svg.selectAll("g.arc")
+            .data(pie(myData))
+            .enter()
+            .append("g")
+            .attr("class", "arc")
+            .attr("transform", `translate(${width / 2},${height / 2})`)
+            .append("path")
+            .attr("fill", function (d, i) {
+                return color(i);
+            })
+            .attr("d", function (d, i) {
+                return arc(d, i)
+            })
+            .on("mouseover", function (event, d) {
+                d3.select(this)
+                    .attr("opacity", 0.7)
+            })
+            .on("mouseout", function (event, d) {
+                d3.select(this)
+                    .attr("opacity", 1)
+            })
+            .append("title")
+            .text((d) => {
+                return `${d.data.name} ${d.data.value} MW covers only ${d3.format(".1%")(d.value / d3.sum(pie(myData), d => d.value))}`
+            })
+
+        svg.selectAll("rect")
+            .data(myData)
+            .enter()
+            .append("rect")
+            .attr("fill", (_, i) => {
+                return color(i)
+            })
+            .attr('width', 20)
+            .attr('height', 20)
+            .attr('x', 200)
+            .attr('y', (_, i) => {
+                return (i + 4) * 48;
+            })
+
+        svg.selectAll("text.second")
+            .data(myData)
+            .enter()
+            .append("text")
+            .text((d) => {
+                return d.name
+            })
+            .attr("font-size", 12)
+            .attr('x', 250)
+            .attr('y', (_, i) => {
+                return (i + 4) * 50;
+            })
+
+        d3.select("#doughnut-singapore-production-input")
+            .selectAll("input")
+            .data(["2021", "2020", "2019"])
+            .enter()
+            .append("input")
+            .attr("type", "button")
+            .attr("class", "btn btn-success mx-1")
+            .attr("value", (d) => {
+                return d;
+            })
+            .style("font-weight", 500)
+            .on("click", (_, d) => {
+
+                year = parseInt(d);
+
+                if (year == 2021) {
+                    myData = disp_data.filter((d) => {
+                        return d.year == 2021
+                    })
+                } else if (year == 2020) {
+                    myData = disp_data.filter((d) => {
+                        return d.year == 2020
+                    })
+                } else {
+                    myData = disp_data.filter((d) => {
+                        return d.year == 2019
+                    })
+                }
+
+                // appends pie chart to svg
+                var arcs = svg.selectAll("g.arc")
+                    .data(pie([]))
+                    .join("g");
+
+                arcs = svg.selectAll("g.arc")
+                    .data(pie(myData))
+                    .join("g");
+
+                arcs.merge(arcs)
+                    .attr("class", "arc")
+                    .attr("transform", `translate(${width / 2},${height / 2})`)
+                    .append("path")
+                    .attr("fill", function (d, i) {
+                        return color(i);
+                    })
+                    .attr("d", function (d, i) {
+                        return arc(d, i)
+                    })
+                    .on("mouseover", function (event, d) {
+                        d3.select(this)
+                            .attr("opacity", 0.7)
+                    })
+                    .on("mouseout", function (event, d) {
+                        d3.select(this)
+                            .attr("opacity", 1)
+                    })
+                    .append("title")
+                    .text((d) => {
+                        return `${d.data.name} ${d.data.value} MW covers only ${d3.format(".1%")(d.value / d3.sum(pie(myData), d => d.value))}`
+                    })
+            })
+    }
+
+    d3.csv("../data/singapore/ses_singapore/custom-doughnut-ses-singapore.csv", (d) => {
+        return {
+            name: d.source,
+            value: parseFloat(d.energy),
+            year: parseInt(d.year)
+        }
+    }).then((data) => {
+        generateDoughnutSingaporeTotalCapacity(data);
+    })
+
     d3.json("../data/map/singapore_map.json").then((json) => {
         d3.csv("../data/singapore/singapore_solar_panel_installations_by_region.csv", (d) => {
             return {
