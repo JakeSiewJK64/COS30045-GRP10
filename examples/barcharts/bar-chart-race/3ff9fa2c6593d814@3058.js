@@ -257,7 +257,7 @@ function _ticker(barSize, width, margin, n, formatDate, keyframes) {
 
 function _formatDate(d3) {
   return (
-    d3.utcFormat("%Y")
+    d3.utcFormat("2017-2021")
   )
 }
 
@@ -326,7 +326,7 @@ export default function define(runtime, observer) {
   main.variable(("duration")).define("duration", _duration);
   main.variable(("n")).define("n", _n);
   main.variable(("names")).define("names", ["data"], _names);
-  main.variable(observer("datevalues")).define("datevalues", ["d3", "data"], _datevalues);
+  main.variable(("datevalues")).define("datevalues", ["d3", "data"], _datevalues);
   main.variable(("rank")).define("rank", ["names", "d3", "n"], _rank);
   main.variable(("k")).define("k", _k);
   main.variable(("keyframes")).define("keyframes", ["d3", "datevalues", "k", "rank"], _keyframes);
